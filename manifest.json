@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "EyeCare Vision Wellness ",
+    "version": "0.0.1",
+    "description": "EyeCare Vision Wellness is a Chrome extension designed to promote eye health and reduce digital eye strain among users who spend significant time on computers and digital devices. As technology becomes more integral to our daily lives, prolonged screen time can lead to various eye-related issues such as dry eyes, eye fatigue, blurred vision, and headaches. This extension aims to mitigate these effects by providing users with tools and reminders to adopt healthy eye care habits.",
+    "permissions": [
+        "tabs",
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "new1.png"
+              }}
+}
