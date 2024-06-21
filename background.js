@@ -39,9 +39,9 @@ function startTimer() {
 
             // Check if timer is at 0 minutes and 0 seconds to open a new page
             if (minutes === 0 && seconds === 0) {
-                openNewPage();
                 minutes = 20; // Reset timer to 20 minutes and 0 seconds
                 seconds = 0;
+                openNewPage();
                 clearInterval(intervalId); // Clear interval after opening new page
                 timerRunning = false;
             }
@@ -61,7 +61,7 @@ function newresetTimer() {
 function resetTimer() {
     clearInterval(intervalId);
     minutes = 20;
-    seconds = 0;
+    seconds = 0 ;
     timerRunning = false;
     updateDisplay();
     chrome.storage.local.set({ minutes, seconds }); // Update storage with reset timer values
