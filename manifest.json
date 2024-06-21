@@ -14,6 +14,7 @@
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "new1.png"
-              }}
+            "128": "new3.png"
+              }
+    }
 }
