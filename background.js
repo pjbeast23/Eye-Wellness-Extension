@@ -9,6 +9,10 @@ function updateDisplay() {
         action: 'updateDisplay',
         minutes: minutes,
         seconds: seconds
+    }, response => {
+        if (null || chrome.runtime.lastError) {
+            console.log("Error sending message: ");
+        }
     });
 }
 
@@ -24,6 +28,7 @@ function startTimer() {
                 seconds = 59;
             } else {
                 clearInterval(intervalId);
+                timerRunning = false;
                 // Optionally, handle what happens when the timer reaches zero
             }
             
@@ -39,10 +44,13 @@ function startTimer() {
         timerRunning = true;
     }
 }
+
+// Function to reset the timer and immediately start it
 function newresetTimer() {
     resetTimer();
     startTimer();
 }
+
 // Function to reset the timer
 function resetTimer() {
     clearInterval(intervalId);
@@ -55,19 +63,27 @@ function resetTimer() {
 
 // Function to open a new page
 function openNewPage() {
-    chrome.tabs.create({ url: chrome.runtime.getURL('newpage.html') });
+    chrome.tabs.create({ url: chrome.runtime.getURL('newpage.html') }, tab => {
+        if (chrome.runtime.lastError) {
+            console.error("Error opening new tab: ", chrome.runtime.lastError.message);
+        }
+    });
 }
 
 // Listen for messages from the popup
-chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'startTimer') {
-        console.log("hello1");
         startTimer();
+        sendResponse({status: "Timer started"});
     } else if (message.action === 'resetTimer') {
         resetTimer();
-    }else if(message.action === 'newresetTimer'){
+        sendResponse({status: "Timer reset"});
+    } else if (message.action === 'newresetTimer') {
         newresetTimer();
-}});
+        sendResponse({status: "Timer reset and started"});
+    }
+    return true; // Keep the messaging channel open for sendResponse
+});
 
 // Initialize timer values from storage (if available)
 chrome.storage.local.get(['minutes', 'seconds'], function(result) {
@@ -75,9 +91,9 @@ chrome.storage.local.get(['minutes', 'seconds'], function(result) {
         minutes = result.minutes;
         seconds = result.seconds;
         updateDisplay();
-        console.log("hello2");
     } else {
         // If no stored values, default to 20 minutes and 0 seconds
-        updateDisplay(minutes, seconds); // Ensure display is updated with current values
+        updateDisplay();
     }
 });
+
