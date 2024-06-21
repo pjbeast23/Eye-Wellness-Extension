@@ -11,6 +11,7 @@ function updateDisplay() {
         seconds: seconds
     }, response => {
         if (null || chrome.runtime.lastError) {
+            return;
             console.log("Error sending message: ");
         }
     });
