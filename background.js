@@ -21,6 +21,7 @@ function updateDisplay() {
 function startTimer() {
     if (!timerRunning) {
         clearInterval(intervalId);  // Clear any existing timer
+
         intervalId = setInterval(() => {
             if (seconds > 0) {
                 seconds--;
@@ -36,9 +37,13 @@ function startTimer() {
             updateDisplay();
             chrome.storage.local.set({ minutes, seconds }); // Update storage with current timer values
 
-            // Check if timer is at 19 minutes and 50 seconds to open a new page
-            if (minutes === 19 && seconds === 50) {
+            // Check if timer is at 0 minutes and 0 seconds to open a new page
+            if (minutes === 0 && seconds === 0) {
                 openNewPage();
+                minutes = 20; // Reset timer to 20 minutes and 0 seconds
+                seconds = 0;
+                clearInterval(intervalId); // Clear interval after opening new page
+                timerRunning = false;
             }
         }, 1000);
 
